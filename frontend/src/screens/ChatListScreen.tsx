@@ -1,3 +1,4 @@
+// src/screens/ChatListScreen.tsx
 import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { colors } from "../theme/colors";
@@ -11,53 +12,57 @@ export const ChatListScreen: React.FC = () => {
   const { openChat, goToProfile, goToLogin } = useNavigationContext();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.root}>
       <View style={styles.header}>
-        <View>
+        <View style={{ flexShrink: 1 }}>
           <Text style={styles.appTitle}>TecNM Chat</Text>
-          <Text style={styles.userSubtitle}>
+          <Text style={styles.userSubtitle} numberOfLines={1}>
             {user.nombre} • {user.carrera}
           </Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
+
+        <View style={styles.headerButtons}>
           <Button
             title="Perfil"
             variant="secondary"
             onPress={goToProfile}
-            style={{ marginRight: 8, paddingHorizontal: 12 }}
+            style={styles.smallButton}
           />
           <Button
             title="Salir"
             variant="secondary"
             onPress={goToLogin}
-            style={{ paddingHorizontal: 12 }}
+            style={styles.smallButton}
           />
         </View>
       </View>
 
-      <Text style={styles.sectionTitle}>Chats</Text>
+      <View style={styles.panel}>
+        <Text style={styles.sectionTitle}>Chats</Text>
 
-      <FlatList
-        data={chats}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <ChatListItem chat={item} onPress={() => openChat(item.id)} />
-        )}
-        contentContainerStyle={{ paddingBottom: 24 }}
-      />
+        <FlatList
+          data={chats}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <ChatListItem chat={item} onPress={() => openChat(item.id)} />
+          )}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: colors.background,
-    padding: 16
+    backgroundColor: colors.tecnmBlue
   },
   header: {
-    marginTop: 8,
-    marginBottom: 16,
+    paddingTop: 24,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
@@ -65,17 +70,37 @@ const styles = StyleSheet.create({
   appTitle: {
     fontSize: 24,
     fontWeight: "800",
-    color: colors.tecnmBlue
+    color: colors.white
   },
   userSubtitle: {
     fontSize: 12,
-    color: colors.textSecondary,
-    marginTop: 2
+    color: "rgba(255,255,255,0.9)",
+    marginTop: 4
+  },
+  headerButtons: {
+    flexDirection: "row",
+    marginLeft: 8
+  },
+  smallButton: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginLeft: 6
+  },
+  panel: {
+    flex: 1,
+    backgroundColor: colors.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 16,
+    paddingTop: 16
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 8,
-    color: colors.textPrimary
+    fontWeight: "700",
+    color: colors.textPrimary,
+    marginBottom: 10
+  },
+  listContent: {
+    paddingBottom: 24
   }
 });

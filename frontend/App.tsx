@@ -1,51 +1,55 @@
+// App.tsx
 import React from "react";
-import { SafeAreaView, StatusBar, View } from "react-native";
+import { SafeAreaView, StatusBar, View, StyleSheet } from "react-native";
 import { NavigationProvider, useNavigationContext } from "./src/context/NavigationContext";
 import { ChatProvider } from "./src/context/ChatContext";
 import { LoginScreen } from "./src/screens/LoginScreen";
 import { ChatListScreen } from "./src/screens/ChatListScreen";
 import { ChatScreen } from "./src/screens/ChatScreen";
 import { ProfileScreen } from "./src/screens/ProfileScreen";
+import { colors } from "./src/theme/colors";
 
 const RootNavigator: React.FC = () => {
   const { currentScreen } = useNavigationContext();
 
-  let ScreenComponent = null;
   switch (currentScreen.name) {
     case "login":
-      ScreenComponent = <LoginScreen />;
-      break;
+      return <LoginScreen />;
     case "chatList":
-      ScreenComponent = <ChatListScreen />;
-      break;
+      return <ChatListScreen />;
     case "chatDetail":
-      ScreenComponent = <ChatScreen chatId={currentScreen.chatId} />;
-      break;
+      return <ChatScreen chatId={currentScreen.chatId} />;
     case "profile":
-      ScreenComponent = <ProfileScreen />;
-      break;
+      return <ProfileScreen />;
     default:
-      ScreenComponent = <LoginScreen />;
+      return <LoginScreen />;
   }
-
-  return (
-    <View style={{ flex: 1, backgroundColor: "#F5F7FB" }}>
-      {ScreenComponent}
-    </View>
-  );
 };
 
 const App: React.FC = () => {
   return (
     <NavigationProvider>
       <ChatProvider>
-        <SafeAreaView style={{ flex: 1, backgroundColor: "#004B8D" }}>
+        <SafeAreaView style={styles.safeArea}>
           <StatusBar barStyle="light-content" />
-          <RootNavigator />
+          <View style={styles.root}>
+            <RootNavigator />
+          </View>
         </SafeAreaView>
       </ChatProvider>
     </NavigationProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.tecnmBlue
+  },
+  root: {
+    flex: 1,
+    backgroundColor: colors.background
+  }
+});
 
 export default App;
